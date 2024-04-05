@@ -6,6 +6,8 @@ Create a New Branch：$ git checkout -b my-branch-name (replacing my-branch-name
 
 Switch to a Branch In Your Local Repo：$ git checkout my-branch-name
 
+Pull a Branch: $ git pull origin my-branch-name
+
 Push to a Branch: $ git push -u origin my-branch-name or $ git push -u origin HEAD (If your local branch does not exist on the remote)
 
 $ git push (If your local branch already exists on the remote)
