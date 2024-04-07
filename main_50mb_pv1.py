@@ -1,5 +1,5 @@
 import time
-from utilization import extract_datetime,extract_sentiment,draw_result, merge_and_find_max, print_time
+from util import extract_datetime,extract_sentiment,draw_result, merge_and_find_max, print_time
 from mpi4py import MPI
 import os
 
