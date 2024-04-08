@@ -7,7 +7,7 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-FILE = "twitter-50mb.json"
+FILE = "twitter-1mb.json"
 
 start_time = time.time()
 

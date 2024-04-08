@@ -232,29 +232,6 @@ def get_max_sum(arr):
 
 
 
-
-
-# output the results
-def draw_result_arr(hour_happy, max_hour_happy, hour_active, max_hour_active, day_happy, max_day_happy, day_active, max_day_active):
-    # process results
-    hour_happy = convert(hour_happy)
-    hour_active = convert(hour_active)
-    day_happy = convert(day_happy)
-    day_active = convert(day_active)
-
-
-
-
-    return 0
-
-
-'''
-(2021, 6, 21, 5) 7.850009811067737
-(2021, 6, 21, 2) 70
-(2021, 6, 21) 63.15673514357178
-(2021, 6, 21) 999
-'''
-
 # convert the date tuple into readable datetime string
 def convert(input_tuple):
     # since we store data in a way that program reads
@@ -266,19 +243,44 @@ def convert(input_tuple):
     date_list[2] += 1
     date_tuple = tuple(date_list)
 
+    # if len(date_tuple) == 4:
+    #     date = datetime.datetime(year=date_tuple[0], month=date_tuple[1], day=date_tuple[2], hour=date_tuple[3])
+    #     readable_datetime = date.strftime("%B %d, %Y, %-I%p")
+    # else:
+    #     date = datetime.date(year=date_tuple[0], month=date_tuple[1], day=date_tuple[2])
+    #     readable_datetime = date.strftime("%B %d, %Y")
+    
     if len(date_tuple) == 4:
         date = datetime.datetime(year=date_tuple[0], month=date_tuple[1], day=date_tuple[2], hour=date_tuple[3])
-        readable_datetime = date.strftime("%B %d, %Y, %-I%p")
-    else:
+        end_hour = date.hour + 1
+        start_hour_formatted = date.strftime("%I").lstrip("0")
+        
+        # Determine AM/PM
+        am_pm = date.strftime("%p")
+        if end_hour == 12:
+            end_hour_formatted = "12"
+        elif end_hour == 24:
+            end_hour_formatted = "12"
+            am_pm = "AM"
+        else:
+            end_hour_formatted = str(end_hour % 12)
+        
+        # format the output
+        readable_datetime = f"{start_hour_formatted}-{end_hour_formatted}{am_pm}"
+        readable_date = date.strftime("%B %d, %Y")
+        
+        return f"{readable_date}, {readable_datetime}"
+    
+    else: # no hour in tuple
         date = datetime.date(year=date_tuple[0], month=date_tuple[1], day=date_tuple[2])
         readable_datetime = date.strftime("%B %d, %Y")
 
     return readable_datetime
 
 
-
+# output the results
 def draw_result_arr(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy):
-    print("The most happiest hour is:", convert(hour_happy), "with the overall sentiment score", max_hour_happy)
-    print("The most happiest day is:", convert(day_happy), "with the overall sentiment score", max_day_happy)
-    print("The most active hour is:", convert(hour_active), "with the overall count", max_hour_active)
-    print("The most active day is:", convert(day_active), "with the overall count", max_day_active)
+    print("The most happiest hour is:", convert(hour_happy), "with the overall sentiment score of {:.2f}".format(max_hour_happy))
+    print("The most happiest day is:", convert(day_happy), "with the overall sentiment score of {:.2f}".format(max_day_happy))
+    print("The most active hour is:", convert(hour_active), "having the most tweets of", max_hour_active)
+    print("The most active day is:", convert(day_active), "having the most tweets of", max_day_active)
