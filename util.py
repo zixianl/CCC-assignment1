@@ -168,12 +168,10 @@ def format_output(hour, day, count_or_score):
 
 
 def draw_result_dict(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy):
-
     print(format_output(hour = hour_happy[1], day = hour_happy[0], count_or_score = max_hour_happy))
     print(format_output(hour = None, day = day_happy, count_or_score = max_day_happy))
     print(format_output(hour = hour_active[1], day = hour_active[0], count_or_score = int(max_hour_active)))
     print(format_output(hour = None, day = day_active, count_or_score = int(max_day_active)))
-
 
     
 
@@ -232,6 +230,30 @@ def get_max_sum(arr):
     max_value = summed_arr[max_index]
     return max_index, max_value
 
+
+
+
+
+# output the results
+def draw_result_arr(hour_happy, max_hour_happy, hour_active, max_hour_active, day_happy, max_day_happy, day_active, max_day_active):
+    # process results
+    hour_happy = convert(hour_happy)
+    hour_active = convert(hour_active)
+    day_happy = convert(day_happy)
+    day_active = convert(day_active)
+
+
+
+
+    return 0
+
+
+'''
+(2021, 6, 21, 5) 7.850009811067737
+(2021, 6, 21, 2) 70
+(2021, 6, 21) 63.15673514357178
+(2021, 6, 21) 999
+'''
 
 # convert the date tuple into readable datetime string
 def convert(input_tuple):
