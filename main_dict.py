@@ -7,7 +7,7 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-FILE = "twitter-1mb.json"
+FILE = "twitter-50mb.json"
 
 start_time = time.time()
 
@@ -55,8 +55,8 @@ with open(FILE, 'r') as file:
 
 
 
-# print_time(start_time, "Parallel Time (read and process data): ")
-# print("My rank is",rank, "My count is", count)
+print_time(start_time, "Parallel Time (read and process data): ")
+print("My rank is",rank, "My count is", count)
 
 
 # gather
@@ -66,7 +66,7 @@ ad_result_list = comm.gather([day_count_dict], root=0)
 ah_result_list = comm.gather([hour_count_dict], root=0)
 
 
-# print_time(start_time, "Parallel Time (read and gather) : ")
+print_time(start_time, "Parallel Time (read and gather) : ")
 
 if rank == 0:
     start_time = time.time()

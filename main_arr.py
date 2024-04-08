@@ -11,7 +11,7 @@ size = comm.Get_size()
 
 FILE = "twitter-1mb.json"
 
-## store with 3D array
+## store with 4D array
 # Asumme recent 5 years interested
 YEAR_START = 2020
 YEAR_END = 2024
@@ -28,7 +28,7 @@ position_start = rank * bytes_per_node
 count = 0
 
 
-## read with 3D array
+## read with 4D array
 with open(FILE, 'r') as file:
     file.seek(position_start,0)
     while True:
@@ -52,15 +52,15 @@ with open(FILE, 'r') as file:
             break
 
 
-# print_time(start_time, "Parallel Time (read and process data): ")
-# print("My rank is",rank, "My count is", count)   
+print_time(start_time, "Parallel Time (read and process data): ")
+print("My rank is",rank, "My count is", count)
 
-'''
+
 # reduce
 hour_sentiment_gathered = comm.reduce(hour_sentiment_arr, op=MPI.SUM, root=0)
 hour_count_gathered = comm.reduce(hour_count_arr, op=MPI.SUM, root=0)
 
-# print_time(start_time, "Parallel Time (read and gather) : ")
+print_time(start_time, "Parallel Time (read and gather) : ")
 
 if rank == 0:
     hour_happy, max_hour_happy = get_max(hour_sentiment_gathered)
@@ -70,32 +70,28 @@ if rank == 0:
 
     draw_result_arr(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy)
 
-    # print_time(start_time, "Serial Time (analyse and print): ")
+    print_time(start_time, "Serial Time (analyse and print): ")
+
+
+
+
 '''
-
-
-
-
 # gather
-hour_sentiment_gathered = comm.gather([hour_sentiment_arr], root=0)
-hour_count_gathered = comm.gather([hour_count_arr], root=0)
+hour_sentiment_gathered = comm.gather(hour_sentiment_arr, root=0)
+hour_count_gathered = comm.gather(hour_count_arr, root=0)
 
 # print_time(start_time, "Parallel Time (read and gather) : ")
 
 if rank == 0:
-    # Convert the list of arrays into a single 4D array for each
-    hour_sentiment_combined = np.stack(hour_sentiment_gathered, axis=0)
-    hour_count_combined = np.stack(hour_count_gathered, axis=0)
-
-    # Sum across the first dimension since the new axis representing different ranks' data
-    hour_sentiment_summed = np.sum(hour_sentiment_combined, axis=0)
-    hour_count_summed = np.sum(hour_count_combined, axis=0)
+    hour_sentiment_summed = np.sum(np.array(hour_sentiment_gathered), axis=0)
+    hour_count_summed = np.sum(np.array(hour_count_gathered), axis=0)
 
     hour_happy, max_hour_happy = get_max(hour_sentiment_summed)
     hour_active, max_hour_active = get_max(hour_count_summed)
     day_happy, max_day_happy = get_max_sum(hour_sentiment_summed)
     day_active, max_day_active = get_max_sum(hour_count_summed)
+
     draw_result_arr(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy)
 
     # print_time(start_time, "Serial Time (analyse and print): ")
-
+'''
