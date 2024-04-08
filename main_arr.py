@@ -55,22 +55,23 @@ with open(FILE, 'r') as file:
 # print_time(start_time, "Parallel Time (read and process data): ")
 # print("My rank is",rank, "My count is", count)   
 
-'''
+
 # reduce
 hour_sentiment_gathered = comm.reduce(hour_sentiment_arr, op=MPI.SUM, root=0)
 hour_count_gathered = comm.reduce(hour_count_arr, op=MPI.SUM, root=0)
 
-# print_time(start_time, "Parallel Time (read and gather) : ")
+print("################### Parallel Time ###########################")
+print_time(start_time, "Parallel Time (read and gather) : ")
 
 if rank == 0:
     hour_happy, max_hour_happy = get_max(hour_sentiment_gathered)
     hour_active, max_hour_active = get_max(hour_count_gathered)
     day_happy, max_day_happy = get_max_sum(hour_sentiment_gathered)
     day_active, max_day_active = get_max_sum(hour_count_gathered)
-
+    print("################### The answers of four questions ###########################")  
     draw_result_arr(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy)
-
-    # print_time(start_time, "Serial Time (analyse and print): ")
+    print("################### Serial Time ###########################")
+    print_time(start_time, "Serial Time (analyse and print): ")
 '''
 
 
@@ -99,3 +100,4 @@ if rank == 0:
 
     # print_time(start_time, "Serial Time (analyse and print): ")
 
+'''

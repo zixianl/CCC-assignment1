@@ -7,7 +7,7 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-FILE = "twitter-1mb.json"
+FILE = "twitter-50mb.json"
 
 start_time = time.time()
 
@@ -54,19 +54,14 @@ with open(FILE, 'r') as file:
             break
 
 
-
-# print_time(start_time, "Parallel Time (read and process data): ")
-# print("My rank is",rank, "My count is", count)
-
-
 # gather
 hd_result_list = comm.gather([day_sentiment_dict], root=0)
 hh_result_list = comm.gather([hour_sentiment_dict], root=0)
 ad_result_list = comm.gather([day_count_dict], root=0)
 ah_result_list = comm.gather([hour_count_dict], root=0)
 
-
-# print_time(start_time, "Parallel Time (read and gather) : ")
+print("################### Parallel Time ###########################")
+print_time(start_time, "Parallel Time (read and gather) : ")
 
 if rank == 0:
     start_time = time.time()
@@ -75,5 +70,7 @@ if rank == 0:
     hour_active, max_hour_active = merge_and_find_max(ah_result_list)
     day_happy, max_day_happy = merge_and_find_max(hd_result_list)
     hour_happy, max_hour_happy = merge_and_find_max(hh_result_list)
+    print("################### The answers of four questions ###########################")
     draw_result_dict(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy)
+    print("################### Serial Time ###########################")
     print_time(start_time, "Serial Time (analyse and print): ")

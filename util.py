@@ -140,12 +140,40 @@ def convert_to_ampm(hour):
         return "12pm"
     else:
         return str(hour - 12) + "pm"
+    
+def convert_to_sentiment_score(score):
+    if score > 0:
+        score = round(score, 2)
+        result_str = "+" + str(score)
+        return result_str
+    return result_str
+
+def format_output(hour, day, count_or_score):
+    day_output = convert_to_readable_date(day)
+   
+    if hour is None:
+        if isinstance(count_or_score, int):
+     
+            return f"{day_output} had the most tweets (#{count_or_score})"
+
+        return f"{day_output} was the happiest day with an overall sentiment score of {convert_to_sentiment_score(count_or_score)}"
+    
+
+    time_range = f"{convert_to_ampm(hour)} - {convert_to_ampm(hour+1)}"
+    if isinstance(count_or_score, int):
+        return f"{time_range} on {day_output} had the most tweets (#{count_or_score})"
+    
+
+    return f"{time_range} on {day_output} was the happiest hour with an overall sentiment score of {convert_to_sentiment_score(count_or_score)}"
+
 
 def draw_result_dict(day_active,hour_active,day_happy,hour_happy,max_day_active,max_hour_active,max_day_happy,max_hour_happy):
-    print("The most happiest hour is:", convert_to_readable_date(hour_happy[0]), convert_to_ampm(hour_happy[1]), "with the overall sentiment score", max_hour_happy)
-    print("The most happiest day is:", convert_to_readable_date(day_happy), "with the overall sentiment score", max_day_happy)
-    print("The most active hour is:", convert_to_readable_date(hour_active[0]), convert_to_ampm(hour_active[1]), "with the overall count", max_hour_active)
-    print("The most active day is:", convert_to_readable_date(day_active), "with the overall count", max_day_active)
+    print(format_output(hour = hour_happy[1], day = hour_happy[0], count_or_score = max_hour_happy))
+    print(format_output(hour = None, day = day_happy, count_or_score = max_day_happy))
+    print(format_output(hour = hour_active[1], day = hour_active[0], count_or_score = int(max_hour_active)))
+    print(format_output(hour = None, day = day_active, count_or_score = int(max_day_active)))
+
+    
 
 
 def merge_and_find_max(results_list):
