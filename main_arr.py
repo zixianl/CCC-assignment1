@@ -9,10 +9,10 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-FILE = "twitter-1mb.json"
+FILE = "twitter-50mb.json"
 
 ## store with 4D array
-# Asumme recent 5 years interested
+# Asumme only interested in recent 5 years
 YEAR_START = 2020
 YEAR_END = 2024
 NUM_YEARS = YEAR_END - YEAR_START + 1
@@ -36,6 +36,8 @@ with open(FILE, 'r') as file:
 
         if row == "":
             break
+
+        # This is to let the rank exclude rank 0 to ignore the first line
         if rank == 0 or bytes_already_read > 0:
             count += 1
             date, hour = extract_datetime(row)   # (year, month, day), hour --> date, hour
@@ -52,18 +54,17 @@ with open(FILE, 'r') as file:
             break
 
 
-# print_time(start_time, "Parallel Time (read and process data): ")
-# print("My rank is",rank, "My count is", count)   
 
-
-# reduce
+# reduce method
 hour_sentiment_gathered = comm.reduce(hour_sentiment_arr, op=MPI.SUM, root=0)
 hour_count_gathered = comm.reduce(hour_count_arr, op=MPI.SUM, root=0)
 
 print("################### Parallel Time ###########################")
 print_time(start_time, "Parallel Time (read and gather) : ")
 
+
 if rank == 0:
+
     hour_happy, max_hour_happy = get_max(hour_sentiment_gathered)
     hour_active, max_hour_active = get_max(hour_count_gathered)
     day_happy, max_day_happy = get_max_sum(hour_sentiment_gathered)
@@ -78,11 +79,12 @@ if rank == 0:
 
 
 '''
-# gather
+# gather method
 hour_sentiment_gathered = comm.gather(hour_sentiment_arr, root=0)
 hour_count_gathered = comm.gather(hour_count_arr, root=0)
 
-# print_time(start_time, "Parallel Time (read and gather) : ")
+print("################### Parallel Time ###########################")
+print_time(start_time, "Parallel Time (read and gather) : ")
 
 if rank == 0:
     hour_sentiment_summed = np.sum(np.array(hour_sentiment_gathered), axis=0)

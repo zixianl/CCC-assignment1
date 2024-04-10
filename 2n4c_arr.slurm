@@ -6,5 +6,6 @@
 
 module load mpi4py/3.1.4
 module load Python/3.10.4
-time mpiexec -n 8 python3 main_dict.py
+module load SciPy-bundle/2022.05
+time mpiexec -n 8 python3 main_arr.py
 my-job-stats -a -n -s

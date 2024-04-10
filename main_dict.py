@@ -7,7 +7,7 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-FILE = "twitter-1mb.json"
+FILE = "twitter-50mb.json"
 
 start_time = time.time()
 
@@ -26,7 +26,6 @@ count = 0
 
 
 ## read with dict
-# 读取的方法也可以多写 -- generator
 with open(FILE, 'r') as file:
 
     file.seek(position_start,0)
@@ -36,6 +35,8 @@ with open(FILE, 'r') as file:
         
         if row == "":
               break
+        
+        # This is to let the rank exclude rank 0 to ignore the first line
         if rank == 0 or bytes_already_read > 0:
             count += 1
             day, hour = extract_datetime(row)
@@ -63,8 +64,9 @@ ah_result_list = comm.gather([hour_count_dict], root=0)
 print("################### Parallel Time ###########################")
 print_time(start_time, "Parallel Time (read and gather) : ")
 
+start_time = time.time()
+
 if rank == 0:
-    start_time = time.time()
     # merge and find max
     day_active, max_day_active = merge_and_find_max(ad_result_list)
     hour_active, max_hour_active = merge_and_find_max(ah_result_list)
