@@ -122,7 +122,7 @@ def extract_sentiment(raw_str):
     return None
 
 
-## This method is to transfer raw string to json format and exact information
+## This method is to transfer raw string to json format and extract information
 # def extract_data(row):
 #     row_dict = json.load(row)
 #     date_str = row_dict["rows"][0]["doc"]["data"]["created_at"][:10]
@@ -294,30 +294,6 @@ def get_max_sum(arr):
     max_index = np.unravel_index(max_index_flat, summed_arr.shape)
     max_value = summed_arr[max_index]
     return max_index, max_value
-
-
-def draw_result_arr(hour_happy, max_hour_happy, hour_active, max_hour_active, day_happy, max_day_happy, day_active, max_day_active):
-   
-   """
-    Outputs the results.
-
-    Args:
-    - hour_happy: Hour corresponding to the happiest hour.
-    - max_hour_happy: Maximum sentiment score for the happiest hour.
-    - hour_active: Hour corresponding to the most active hour.
-    - max_hour_active: Maximum count for the most active hour.
-    - day_happy: Day corresponding to the happiest day.
-    - max_day_happy: Maximum sentiment score for the happiest day.
-    - day_active: Day corresponding to the most active day.
-    - max_day_active: Maximum count for the most active day.
-    """
-   hour_happy = convert(hour_happy)
-   hour_active = convert(hour_active)
-   day_happy = convert(day_happy)
-   day_active = convert(day_active)
-   
-   return 0
-
 
 
 def convert(input_tuple):
